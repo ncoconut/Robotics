@@ -142,7 +142,7 @@ class URRobot {
     // std::cout <<"RPY UNO: "<<angles[0]<<" "<<angles[1]<<"
     // "<<angles[2]<<std::endl;  std::cout <<"POS UNO: "<<pos[0]<<" "<<pos[1]<<"
     // "<<pos[2]<<std::endl;
-    rw::kinematics::Frame *tool_frame = device->getEnd();
+    rw::kinematics::Frame *tool_frame = wc->findFrame("UR1.TCP");
     /*std::vector<rw::kinematics::Frame*> frames = wc->getFrames();
 
     for(int i = 0; i < frames.size(); i++){
@@ -183,7 +183,7 @@ class URRobot {
     std::cout << "name " << std::endl << name << std::endl << std::endl;*/
 
     ros::spinOnce();
-    auto endFrame = device->getEnd();
+    auto endFrame = wc->findFrame("UR1.TCP");;
     auto endTransform = device->baseTframe(endFrame, state);
     auto rpy = RPY<double>(endTransform.R());
     auto pos = endTransform.P();
