@@ -2,6 +2,8 @@
 #include "caros/serial_device_si_proxy.h"
 #include "ros/package.h"
 #include "rw/rw.hpp"
+//#include "rw/invkin.hpp"
+#include <rw/invkin/JacobianIKSolver.hpp>
 
 using namespace rw::math;
 using namespace std;
@@ -15,6 +17,7 @@ class URRobot {
   rw::kinematics::State state;
   caros::SerialDeviceSIProxy *robot;
   Q q_home;
+  rw::invkin::JacobianIKSolver *solver;
 
  public:
   URRobot() {
@@ -93,11 +96,10 @@ class URRobot {
     rw::math::Transform3D<> baseTtool = device->baseTframe(tool, state);
     rw::math::VelocityScrew6D<double> deltaU =
         calculateDeltaU(baseTtool, baseTtool_desired);
-    std::cout << "POS UNO: " << (baseTtool.P())[0] << " " << (baseTtool.P())[1]
-              << " " << (baseTtool.P())[2] << std::endl;
+
     // This epsilon is the desired tolerance on the final position.
-    const double epsilon = 0.0001;
-    cout << "dentro algoritmo 1 antes del while " << endl;
+    const double epsilon = 0.1;
+   
     while (deltaU.norm2() > epsilon) {
       rw::math::Jacobian J = device->baseJframe(
           tool, state);  // This line does the same as the function from
@@ -117,7 +119,7 @@ class URRobot {
       // Here we add the change in configuration to the current configuration
       // and move the robot to that position.
       q += deltaQ;
-      device->setQ(q, state);
+      device->setQ(q,state);
 
       // We need to calculate the forward dynamics again since the robot has
       // been moved
@@ -158,13 +160,23 @@ class URRobot {
     // as value so we have copies that we can change as we want during the
     // inverse kinematics.
 
-    cout << "antes de algoritmo 1" << endl;
-    rw::math::Q q_algo =
-        algorithm1(device, state, tool_frame, baseTtool_desired, getQ());
-    setQ(q_algo);
-    std::cout << std::endl
-              << "transformado jejeej" << std::endl
-              << q_algo << std::endl;
+
+    solver = new rw::invkin::JacobianIKSolver(device, state);
+    //auto solver = rw::invkin::JacobianIKSolver(device, state);
+    //auto solution = solver.solve(baseTtool_desired,state);
+    std::vector<rw::math::Q> solution = solver->solve(baseTtool_desired, state);
+    for(int k=0; k<solution.size(); k++)
+    std::cout << "solution solve inkin " << k << " -> "<< solution[k] << std::endl;
+    /*rw::math::Q q_algo =
+        algorithm1(device, state, tool_frame, baseTtool_desired, getQ());*/
+    /*if(solution.size()==1){
+       device->setQ(solution[0],state);
+       cout << "size = 1 setQ device" << endl; 
+        cout << "haciendo robot. setQ"<<endl;
+      // robot->setQ(solution[0]);
+    }*/
+   
+
     return true;
   }
 
@@ -226,10 +238,11 @@ int main(int argc, char **argv) {
             << robot.getQ() << std::endl
             << std::endl;
 
-  std::cout << "Input destination joint config in radians:" << std::endl;
+ /* std::cout << "Input destination joint config in radians:" << std::endl;
   float q1, q2, q3, q4, q5, q6;
-  robot.getPose();
-  /*	std::cin >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+  robot.getPose();*/
+
+  /*std::cin >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
   rw::math::Q q(6, q1, q2, q3, q4, q5, q6);
   std::cout << "ANTES IF :" << std::endl;
   if (robot.setQ(q)){
@@ -240,18 +253,24 @@ int main(int argc, char **argv) {
   else{
           // std::cout << "dentro else :" << std::endl;
           std::cout << std::endl << "Failed to move robot" << std::endl;
-  }
+  }*/
   // std::cout << "antes get pose, despues if/else" << std::endl;
-  */
+  
   std::cout << "POSICIONES Y ANGULOS INPUT:" << std::endl;
   float x, y, z, r, p, yaw;
   std::cin >> x >> y >> z >> r >> p >> yaw;
   rw::math::Vector3D<double> pos(x, y, z);
   auto rpy = RPY<double>(r, p, yaw);
-  std::cout << "datos recogidos, antes set pose" << endl;
+  //std::cout << "datos recogidos, antes set pose" << endl;
   robot.setPose(pos, rpy);
   cout << std::endl << "final set pose  " << endl;
   robot.getPose();
-  cout << "final get pose" << endl;
+  float q1, q2, q3, q4, q5, q6;
+  cout << "introduce Q solution" << endl;
+  std::cin >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+  rw::math::Q Q_in(6, q1, q2, q3, q4, q5, q6);
+  
+  robot.setQ(Q_in);
+
   return 0;
 }

@@ -12,7 +12,7 @@
 <DHJoint name="Joint6" alpha="-90" a="0" d="0.093" offset="0" type="schilling" />
 
 <Frame name="TCP" refframe="Joint6">
-	<RPY>-180 180 180</RPY><Pos>0 0 0.082</Pos>
+	<RPY>0 0 0</RPY><Pos>0 0 0.082</Pos>
 </Frame>
 
 <Frame name="ToolBase" refframe="TCP">
