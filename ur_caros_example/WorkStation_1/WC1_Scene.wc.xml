@@ -8,7 +8,7 @@
  </Frame>
 
  <Frame name="Robot" refframe="Table">
-    <RPY> -90 0 0 </RPY> <Pos>-0.125 -0.125 0.974</Pos>
+    <RPY> -180 180 180 </RPY> <Pos>-0.125 -0.125 0.974</Pos>
  </Frame>
  <Include file="UR/UR.wc.xml" />
  
