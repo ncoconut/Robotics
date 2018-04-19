@@ -1,0 +1,52 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/bart/Documents/uni/project/devel/include",
+                    "/opt/ros/kinetic/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_camera/include",
+                    "/home/bart/Documents/uni/project/src/caros/core/caros_common/include",
+                    "/home/bart/Documents/uni/project/src/caros/core/caros_common_robwork/include",
+                    "/home/bart/Documents/uni/project/src/caros/interfaces/caros_control/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_leapmotion/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_netft/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_robotiq/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_schunkpg70/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_sdh/include",
+                    "/home/bart/Documents/uni/project/src/caros/interfaces/caros_sensor/include",
+                    "/home/bart/Documents/uni/project/src/caros/components/caros_teleoperation/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_trakstar/include",
+                    "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_universalrobot/include",
+                    "/usr/include"
+                ]
+            },
+            "includePath": [
+                "/home/bart/Documents/uni/project/devel/include",
+                "/opt/ros/kinetic/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_camera/include",
+                "/home/bart/Documents/uni/project/src/caros/core/caros_common/include",
+                "/home/bart/Documents/uni/project/src/caros/core/caros_common_robwork/include",
+                "/home/bart/Documents/uni/project/src/caros/interfaces/caros_control/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_leapmotion/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_netft/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_robotiq/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_schunkpg70/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_sdh/include",
+                "/home/bart/Documents/uni/project/src/caros/interfaces/caros_sensor/include",
+                "/home/bart/Documents/uni/project/src/caros/components/caros_teleoperation/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_trakstar/include",
+                "/home/bart/Documents/uni/project/src/caros/hwcomponents/caros_universalrobot/include",
+                "/usr/include"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 3
+}
