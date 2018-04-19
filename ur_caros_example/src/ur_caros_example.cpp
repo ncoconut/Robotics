@@ -33,6 +33,7 @@ private:
   rw::kinematics::State state;
   caros::SerialDeviceSIProxy *robot;
   Q q_home;
+  rw::math::Transform3D<double> t_home;
   // rw::invkin::JacobianIKSolver *solver;
 
 public:
@@ -89,72 +90,6 @@ public:
       return false;
   }
 
-  //////////////////////////////////////////////////////////////////////////////
-
-  rw::math::VelocityScrew6D<double> calculateDeltaU(const rw::math::Transform3D<double> &baseTtool,
-                                                    const rw::math::Transform3D<double> &baseTtool_desired)
-  {
-    // Calculate the positional difference, dp
-    // cout << "dentro calcula de delta U " << endl;
-    rw::math::Vector3D<double> dp = baseTtool_desired.P() - baseTtool.P();
-
-    // Calculate the rotational difference, dw
-    rw::math::EAA<double> dw(baseTtool_desired.R() * rw::math::inverse(baseTtool.R()));
-
-    return rw::math::VelocityScrew6D<double>(dp, dw);
-  }
-
-  rw::math::Q algorithm1(const rw::models::Device::Ptr device, rw::kinematics::State state,
-                         const rw::kinematics::Frame *tool, const rw::math::Transform3D<double> baseTtool_desired,
-                         rw::math::Q q)
-  {
-    // We need an initial base to tool transform and the positional error at the
-    // start (deltaU)
-    rw::math::Transform3D<> baseTtool = device->baseTframe(tool, state);
-    rw::math::VelocityScrew6D<double> deltaU = calculateDeltaU(baseTtool, baseTtool_desired);
-
-    // This epsilon is the desired tolerance on the final position.
-    const double epsilon = 0.1;
-
-    while (deltaU.norm2() > epsilon)
-    {
-      rw::math::Jacobian J = device->baseJframe(tool, state);  // This line does the same as the function from
-                                                               // Programming Exercise 4.1
-      // We need the inverse of the jacobian. To do that, we need to access the
-      // Eigen representation of the matrix. For information on Eigen, see
-      // http://eigen.tuxfamily.org/.
-      rw::math::Jacobian Jinv(J.e().inverse());
-
-      // In RobWork there is an overload of operator* for Jacobian and
-      // VelocityScrew that gives Q This can also manually be done via Eigen as
-      // J.e().inverse() * deltaU.e() Note that this approach only works for
-      // 6DOF robots. If you use a different robot, you need to use a pseudo
-      // inverse to solve the equation J * deltaQ = deltaU
-      rw::math::Q deltaQ = Jinv * deltaU;
-
-      // Here we add the change in configuration to the current configuration
-      // and move the robot to that position.
-      q += deltaQ;
-      device->setQ(q, state);
-
-      // We need to calculate the forward dynamics again since the robot has
-      // been moved
-      baseTtool = device->baseTframe(tool, state);  // This line performs the
-                                                    // forward kinematics
-                                                    // (Programming
-                                                    // Exercise 3.4)
-
-      // cout << "Base T tool   " << baseTtool << endl;
-      // cout << "Bast T tool desired " << baseTtool_desired << endl;
-
-      // Update the cartesian position error
-      deltaU = calculateDeltaU(baseTtool, baseTtool_desired);
-      // cout << "delta U "  << deltaU << endl;
-    }
-    return q;
-  }
-  /////////////////////////////////////////////////////////////////////////////////
-
   bool setPose(rw::math::Vector3D<double> pos, RPY<double> angles)
   {
     ros::spinOnce();
@@ -182,10 +117,14 @@ public:
     // auto solver = rw::invkin::JacobianIKSolver(device, state);
     // auto solution = solver.solve(baseTtool_desired,state);
     std::vector<rw::math::Q> solution = solver->solve(baseTtool_desired, state);
-    for (int k = 0; k < solution.size(); k++)
+    for (size_t k = 0; k < solution.size(); k++)
+    {
       std::cout << "solution solve inkin " << k << " -> " << solution[k] << std::endl;
+    }
     if (solution.size() > 0)
+    {
       setQ(solution[0]);
+    }
 
     /*rw::math::Q q_algo =
         algorithm1(device, state, tool_frame, baseTtool_desired, getQ());*/
@@ -193,7 +132,7 @@ public:
     return true;
   }
 
-  bool getPose()
+  rw::math::Transform3D<double> getPose()
   {
     // spinOnce processes one batch of messages, calling all the callbacks
 
@@ -210,14 +149,13 @@ public:
 
     ros::spinOnce();
     auto endFrame = wc->findFrame("UR1.TCP");
-    ;
     auto endTransform = device->baseTframe(endFrame, state);
     auto rpy = RPY<double>(endTransform.R());
     auto pos = endTransform.P();
     std::cout << "RPY UNO: " << rpy[0] << " " << rpy[1] << " " << rpy[2] << std::endl;
     std::cout << "POS UNO: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
 
-    return true;
+    return endTransform;
   }
 
   bool checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q)
@@ -248,7 +186,7 @@ public:
     double min = 10000;
     double dist = 0;
     Q q_nearest = path[0];
-    for (int k = 0; k < path.size(); k++)
+    for (size_t k = 0; k < path.size(); k++)
     {
       Q dq = q_rand - path[k];
       dist = dq.norm2();
@@ -272,34 +210,23 @@ public:
     // cuando no choca -> true
   }
 
+  bool initialize()
+  {
+    q_home = getQ();
+    t_home = getPose();
+
+    return true;
+  }
+
   bool planner_rrt(double x, double y, double z, RPY<double> rpy)
   {
-    // PlannerConstraint constraint =
-    //     PlannerConstraint::make(&detector, device, state);
-
-    //  QSampler::Ptr sampler = QSampler::makeConstrained(
-    //      QSampler::makeUniform(device), constraint.getQConstraintPtr());
-    // QMetric::Ptr metric = MetricFactory::makeEuclidean<Q>();
-
-    // QToQPlanner::Ptr planner = RRTPlanner::makeQToQPlanner(
-    //     constraint, sampler, metric, extend, RRTPlanner::RRTConnect);
-
-    // TODO Initialize this value at start (Get default_q from configuration)
-    Q from(6, 0, -1.5708, 0, -1.57095, 0, -0.000153494);
-    // Q to(6,1.7,0.6,-0.8,0.3,0.7,-0.5); // Very difficult for planner
-    // Q to(6, 1.07129, -0.803471, -0.431695, -1.91307, -2.6387, 0.775581);
-    /*
-    - obtener rand transf..
-    */
     rw::math::Vector3D<double> pos(x, y, z);
-    // auto rpy = RPY<double>(yaw, p, r);  /// OJO al yaw , r
-
+    rw::math::Q q_goal;
     rw::math::Transform3D<double> baseTtool_desired(pos, rpy.toRotation3D());
     auto solver = new rw::invkin::JacobianIKSolver(device, state);
-    rw::math::Q q_goal;
     std::vector<rw::math::Q> solutions = solver->solve(baseTtool_desired, state);
     std::vector<rw::math::Q> path;
-    path.push_back(from);
+    path.push_back(getQ());
     rw::math::Q diferencia;
 
     if (solutions.size() > 0)
@@ -309,9 +236,10 @@ public:
 
     do
     {
-      auto x_rand = x - 0.1 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
-      auto y_rand = y - 0.1 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
-      auto z_rand = z - 0.1 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
+      // TODO Set as constants
+      auto x_rand = x - 0.01 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.01 + 0.01)));
+      auto y_rand = y - 0.01 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.01 + 0.01)));
+      auto z_rand = z - 0.001 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (0.001 + 0.001)));
 
       rw::math::Vector3D<double> pos_rand(x_rand, y_rand, z_rand);
       rw::math::Transform3D<double> baseTtool_desired_rand(pos_rand, rpy.toRotation3D());
@@ -335,12 +263,6 @@ public:
       diferencia = q_new - q_goal;
     } while (diferencia.norm2() > 0.1);
 
-    // if (!checkCollisions(device, state, detector, from)) return true;
-    // if (!checkCollisions(device, state, detector, to)) return true;
-    // cout << "Planning from " << from << " to " << to << endl;
-
-    // planner->query(from, to, path, MAXTIME);
-
     cout << "Path of length " << path.size() << endl;
 
     for (QPath::iterator it = path.begin(); it < path.end(); it++)
@@ -359,52 +281,20 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "URRobot");
   URRobot robot;
-
-  /* std::cout << "Current joint config:" << std::endl
-             << robot.getQ() << std::endl
-             << std::endl;
- */
-  /* std::cout << "Input destination joint config in radians:" << std::endl;
-   float q1, q2, q3, q4, q5, q6;
-   robot.getPose();*/
-
-  /*std::cin >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
-  rw::math::Q q(6, q1, q2, q3, q4, q5, q6);
-  std::cout << "ANTES IF :" << std::endl;
-  if (robot.setQ(q)){
-          // std::cout << "dentro if :" << std::endl;
-          std::cout << std::endl << "New joint config:" << std::endl <<
-  robot.getQ() << std::endl;
-  }
-  else{
-          // std::cout << "dentro else :" << std::endl;
-          std::cout << std::endl << "Failed to move robot" << std::endl;
-  }*/
-  // std::cout << "antes get pose, despues if/else" << std::endl;
-
-  /*std::cout << "POSICIONES Y ANGULOS INPUT:" << std::endl;
-  float x, y, z, r, p, yaw;
-  std::cin >> x >> y >> z >> r >> p >> yaw;
-  rw::math::Vector3D<double> pos(x, y, z);
-  auto rpy = RPY<double>(yaw, p, r);
-  // std::cout << "datos recogidos, antes set pose" << endl;
-  robot.setPose(pos, rpy);
-  cout << std::endl << "final set pose  " << endl;
-  robot.getPose();*/
-  // float q1, q2, q3, q4, q5, q6;
-  // cout << "introduce Q solution" << endl;
-  // std::cin >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
-  // rw::math::Q Q_in(6, q1, q2, q3, q4, q5, q6);
-
-  // robot.setQ(Q_in);
-
+  robot.initialize();  // Otherwise we can forget to set the device or something...
   /* #########  PLANNER CONSTRAINT ######################################### */
+
+  std::cout << robot.getQ() << std::endl;  // para mostrar nada mas
+  // std::cout << robot.getPose() << std::endl;
+  auto robot_transform = robot.getPose();
+  std::cout << "Metete unas coordenadas loco: " << std::endl;
+  float x, y, z;
+  std::cin >> x >> y >> z;
   cout << "llamamos planner " << endl;
-  auto rpy = RPY<double>(1.5, 1.5, 1.5);
-  int xx = 1;
-  int yy = 1;
-  int zz = 1;
-  bool num = robot.planner_rrt(xx, yy, zz, rpy);
+  auto rpy = RPY<double>(robot_transform.R());
+  // TODO change roll/yaw -> NEEDED
+
+  robot.planner_rrt(x, y, z, rpy);
   cout << " planer termiando " << endl;
   return 0;
 }
