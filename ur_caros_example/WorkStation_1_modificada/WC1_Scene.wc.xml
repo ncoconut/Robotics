@@ -1,14 +1,14 @@
 <WorkCell name="SceneUR">
-<!--
+
 <Frame name="Table" refframe="WORLD">  
 	<RPY> 0 0 0 </RPY> <Pos> 0 0 0 </Pos>
 	<Drawable name="Table">
           <Polytope file="Geometry/table_small" />
      </Drawable>
- </Frame>-->
+ </Frame>
 
  <Frame name="Robot" refframe="Table">
-    <RPY> -180 180 180 </RPY> <Pos>-0.125 -0.125 0.974</Pos>
+    <RPY> -90 0 0 </RPY> <Pos>-0.125 -0.125 0.974</Pos>
  </Frame>
  <Include file="UR/UR.wc.xml" />
  
@@ -19,17 +19,25 @@
 </Frame>
    <Include file="PG70/PG70.xml" />
 
+ <Frame name="Conveyour" refframe="Table">
+	<RPY> 0 0 90 </RPY> <Pos> -1.105 0.25 0.61 </Pos>
+     	<Drawable name="Conveyour">
+	<RPY> 0 0 0 </RPY> <Pos> 0 0 0 </Pos>
+	<Polytope file="Geometry/conv" />
+	</Drawable>
+  </Frame>
 
+   <!--
 
-<!-- <Frame name="Computer" refframe="Table">
+ <Frame name="Computer" refframe="Table">
       <RPY> 0 0 0 </RPY> <Pos> -1.105 -0.855 0.974 </Pos>
      <Drawable name="Computer">
    <RPY> 0 0 0 </RPY> <Pos> 0 0 0</Pos>
    <Polytope file="Geometry/computer_small" />
   </Drawable>
-  </Frame>--> 
+  </Frame>
   
-  
+    -->
 <CollisionSetup file="CollisionSetup.xml"/>
 
 </WorkCell>

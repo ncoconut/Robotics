@@ -1,0 +1,217 @@
+CONCLUSIONES -> 
+Inicialmente teniamos el valor extend = 0.01 -> esta es la distancia
+que avanzamos en la dirección de nuestro q_rand (ver funcion NewConfig)
+Usando extend = 0.01, he hecho test cambiando el numero de goals (considerando los 5 goals - considerando solo 1 goal) 
+y también modificando el valor de la region (region = 0.05-> grande, region = 0.01 -> pequeña)
+Cuando extend = 0.01 la longitud del camino es la misma para 5 o 1 goal 
+Cuando usamos region 0.05 (grande) en ambos casos siempre obtenemos un path length = 2, 
+formado por el q inicial y el q goal, desde mi punto de vista esto no es muy adecuado ..
+
+Después cambié el extend = 0.05
+en el caso de 5 goal obtenemos resultados en todos los test menos en el ultimo caso de la region pequeña (0.01), 
+deje correr el programa 5 minutos y seguía añadiendo puntos al path .. lo paré 
+En el caso de 1 goal, paré todos los test correspondientes a la region pequeña, porque pasaron también 5 min
+las longitudes del path de 5 goals con region grande y del path de 1 goal con region grande son iguales.  
+Aquí lo unico que veo positivo de los 5 goals aquí es que en el caso de la region pequeña obtenemos resultados (path lenghts = 107 , 13 , 14) 
+mientras que los mismos test con 1 goal toman demasiado tiempo
+
+Desde mi punto de vista todo depende de los valores que le demos a estas variables... 
+
+PD - he hecho los mismo tests en todos los casos
+
+
+
+TODOS LOS TEST -> extend = 0.01
+# Usando los 5 goals 
+# region = 0.05;
+
+Posicion inicial es siempre la poscion de inicio del simulador 
+rw::math::Q q_ini(6,-1.6007, -1.7271, -2.203, -0.808, 1.5951, -0.031);
+POS: -0.119862 -0.488235 0.144881
+RPY: -3.1165 0.0249455 -1.5697
+
+1st -> -0.3 -0.6 0.2
+path length 2 
+POS: -0.290582 -0.601295 0.199931
+RPY: -3.11652 0.0249338 -1.5697
+
+2nd -> -0.65 -0.4 0.25
+path length 2
+POS: -0.640487 -0.404637 0.250079
+RPY: -3.11657 0.024909 -1.5697
+
+3th -> 0.6 -0.5 0.25
+path length 2 
+POS: 0.603425 -0.504868 0.250182
+RPY: -3.11655 0.0248523 -1.5697
+
+4th -> 0.8 0 0
+path length 2
+POS: 0.806339 -0.00720235 0.00147211
+RPY: -3.11654 0.0247714 -1.5697
+
+----------------------------------------------------------------------------------------------------------------
+# Usando los 5 goals 
+# region = 0.01;
+
+1st -> -0.3 -0.6 0.2
+path length 5
+POS: -0.299382 -0.597557 0.199909
+RPY: -3.11651 0.0249443 -1.5697
+
+2nd -> -0.65 -0.4 0.25 
+path lenght 4
+POS: -0.650471 -0.396895 0.249679
+RPY: -3.11652 0.0249366 -1.5697
+
+3th -> 0.6 -0.5 0.25
+path length 9
+POS: 0.598334 -0.503301 0.250298
+RPY: -3.11651 0.0249378 -1.5697
+
+4th -> 0.8 0 0
+path length 5 
+POS: 0.799515 0.00273479 -9.94951e-05
+RPY: -3.11651 0.0249383 -1.5697
+
+-------------------------------------------------------------------------------
+# Usando 1 goals 
+# region = 0.05;
+
+1st -> -0.3 -0.6 0.2
+path length 2
+POS: -0.290582 -0.601295 0.199931
+RPY: -3.11652 0.0249338 -1.5697
+
+2nd -> -0.65 -0.4 0.25
+path length 2
+POS: -0.640487 -0.404637 0.250079
+RPY: -3.11657 0.024909 -1.5697
+
+3th -> 0.6 -0.5 0.25
+path length 2
+POS: 0.603425 -0.504868 0.250182
+RPY: -3.11655 0.0248523 -1.5697
+
+4th -> 0.8 0 0
+path length 2
+POS: 0.806339 -0.00720235 0.00147211
+RPY: -3.11654 0.0247714 -1.5697
+
+------------------------------------------------------------------
+# Usando 1 goals 
+# region = 0.01;
+
+1st -> -0.3 -0.6 0.2
+path length 5
+POS: -0.299382 -0.597557 0.199909
+RPY: -3.11651 0.0249443 -1.5697
+
+2nd -> -0.65 -0.4 0.25
+path length 4
+POS: -0.650471 -0.396895 0.249679
+RPY: -3.11652 0.0249366 -1.5697
+
+3th -> 0.6 -0.5 0.25
+path length 9
+POS: 0.598334 -0.503301 0.250298
+RPY: -3.11651 0.0249378 -1.5697
+
+4th -> 0.8 0 0
+path length 5
+POS: 0.799515 0.00273479 -9.94951e-05
+RPY: -3.11651 0.0249383 -1.5697
+
+
+########################################################################################3
+TODOS LOS TEST -> extend = 0.05
+
+# Usando los 5 goals 
+# region = 0.05;
+
+Posicion inicial es siempre la poscion de inicio del simulador 
+rw::math::Q q_ini(6,-1.6007, -1.7271, -2.203, -0.808, 1.5951, -0.031);
+POS: -0.119862 -0.488235 0.144881
+RPY: -3.1165 0.0249455 -1.5697
+
+1st -> -0.3 -0.6 0.2
+path length 6
+POS: -0.287745 -0.597636 0.198296
+RPY: -3.11655 0.0249048 -1.5697
+
+2nd -> -0.65 -0.4 0.25
+path length 4
+POS: -0.639475 -0.405947 0.248756
+RPY: -3.1167 0.0248401 -1.56971
+
+3th -> 0.6 -0.5 0.25
+path length 2
+POS: 0.589749 -0.515631 0.248631
+RPY: -3.11672 0.0244915 -1.56971
+
+4th -> 0.8 0 0
+path length 3
+POS: 0.804743 -0.0185968 0.00366448
+RPY: -3.11664 0.0242969 -1.56971
+
+-----------------------------------------------------------------------
+# Usando los 5 goals 
+# region = 0.01;
+
+1st -> -0.3 -0.6 0.2
+path length 107
+POS: -0.289634 -0.611546 0.198403
+RPY: -3.11661 0.0248587 -1.5697
+
+2nd -> -0.65 -0.4 0.25 
+path lenght 13
+POS: -0.640188 -0.410056 0.248681
+RPY: -3.11671 0.024837 -1.56971
+
+3th -> 0.6 -0.5 0.25
+path length 14
+POS: 0.587485 -0.512013 0.24872
+RPY: -3.11669 0.0245536 -1.56971
+
+4th -> 0.8 0 0
+path length --- Más de 5 minutos calculando la solución ... Lo paré 
+
+----------------------------------------------------------------------------
+# Usando 1 goals 
+# region = 0.05;
+
+1st -> -0.3 -0.6 0.2
+path length 6
+POS: -0.287745 -0.597636 0.198296
+RPY: -3.11655 0.0249048 -1.5697
+
+2nd -> -0.65 -0.4 0.25
+path length 4
+POS: -0.639475 -0.405947 0.248756
+RPY: -3.1167 0.0248401 -1.56971
+
+3th -> 0.6 -0.5 0.25
+path length 2
+POS: 0.589749 -0.515631 0.248631
+RPY: -3.11672 0.0244915 -1.56971
+
+4th -> 0.8 0 0
+path length 3
+POS: 0.804743 -0.0185968 0.00366448
+RPY: -3.11664 0.0242969 -1.56971
+
+----------------------------------------------------------------------------------
+# Usando 1 goals 
+# region = 0.01;
+
+1st -> -0.3 -0.6 0.2
+path length  --- Más de 5 minutos calculando la solución ... Lo paré 
+
+2nd -> -0.65 -0.4 0.25
+path length --- Más de 5 minutos calculando la solución ... Lo paré 
+
+3th -> 0.6 -0.5 0.25
+path length --- Más de 5 minutos calculando la solución ... Lo paré 
+
+4th -> 0.8 0 0
+path length --- Más de 5 minutos calculando la solución ... Lo paré 

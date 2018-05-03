@@ -38,6 +38,8 @@ class URRobot {
  public:
   URRobot() {
     auto packagePath = ros::package::getPath("ur_caros_example");
+   /* wc = rw::loaders::WorkCellLoader::Factory::load(
+        packagePath + "/WorkStation_1_modificada/WC1_Scene.wc.xml");*/
     wc = rw::loaders::WorkCellLoader::Factory::load(
         packagePath + "/WorkStation_1/WC1_Scene.wc.xml");
     device = wc->findDevice("UR1");
@@ -75,7 +77,7 @@ class URRobot {
       cout << "El solver no ha encontrado solucion " << endl;
     if (solutions.size() > 0) {
       q_inverse = solutions[0];
-      cout << "Q inverse " << q_inverse << endl;
+      // cout << "Q inverse " << q_inverse << endl;
     }
     return q_inverse;
   }
@@ -186,24 +188,25 @@ class URRobot {
     CollisionDetector::QueryResult data;
     bool colFrom;
 
-    // algoritmo 1 check collision // dividimos el edge en 3 y comprobamos esos tres puntos
-    double epsilon = extend/3;
+    // algoritmo 1 check collision // dividimos el edge en 3 y comprobamos esos
+    // tres puntos
+    double epsilon = extend / 3;
     rw::math::Q delta_q = q_new - q_near;
-    double norm = delta_q.norm2(); 
-    int n = ceil(norm/(epsilon)) - 1;
+    double norm = delta_q.norm2();
+    int n = ceil(norm / (epsilon)) - 1;
     rw::math::Q q;
-    for (int i = 1; i<=n; i++) {
-      q = i*epsilon*(delta_q/norm) + q_near;
+    for (int i = 1; i <= n; i++) {
+      q = i * epsilon * (delta_q / norm) + q_near;
       testState = state;
       device->setQ(q, testState);
       colFrom = detector.inCollision(testState, &data);
       if (colFrom) {
-        cerr << "Configuration in collision: " << q << endl;
-        cerr << "Colliding frames: " << endl;
+        //  cerr << "Configuration in collision: " << q << endl;
+        // cerr << "Colliding frames: " << endl;
         FramePairSet fps = data.collidingFrames;
         for (FramePairSet::iterator it = fps.begin(); it != fps.end(); it++) {
-          cerr << (*it).first->getName() << " " << (*it).second->getName()
-               << endl;
+          //    cerr << (*it).first->getName() << " " << (*it).second->getName()
+          //       << endl;
         }
         return false;
       }
@@ -258,8 +261,11 @@ class URRobot {
     rw::math::Q dif2;
     rw::math::Q dif3;
     rw::math::Q dif4;
+    rw::math::Q deltaQ_max;
+    rw::math::Q deltaQ_min;
 
-    double region = 0.05;
+    // double region = 0.1;
+    double region = 0.01;
 
     rw::math::Vector3D<double> pos1(x + region, y + region, z);
     rw::math::Vector3D<double> pos2(x - region, y + region, z);
@@ -271,7 +277,26 @@ class URRobot {
     rw::math::Q q3_limit = inverseKinematics(pos3, rpy);
     rw::math::Q q4_limit = inverseKinematics(pos4, rpy);
 
+    auto qMin = device->getBounds().first;
+    auto qMax = device->getBounds().second;
+    rw::math::Q q_zero(6, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05);
+    /* FORWARD KINEMATICS
+      State testState;
+      testState = state;
+
+      device->setQ(qMin, testState);
+      auto endFrame = device->getEnd();
+      auto endTransform = device->baseTframe(endFrame, testState);
+      auto pos_min = endTransform.P();
+
+      device->setQ(qMax, testState);
+      endTransform = device->baseTframe(endFrame, testState);
+      auto pos_max = endTransform.P();*/
+
+    // int count_collision = 0;
+    bool keep = false;
     do {
+      keep = false;
       // TODO Set as constants
       auto x_rand = x - 0.01 +
                     static_cast<float>(rand()) /
@@ -282,16 +307,56 @@ class URRobot {
       auto z_rand = z - 0.001 +
                     static_cast<float>(rand()) /
                         (static_cast<float>(RAND_MAX / (0.001 + 0.001)));
+      /* auto x_rand = x - 0.1 +
+                     static_cast<float>(rand()) /
+                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
+       auto y_rand = y - 0.1 +
+                     static_cast<float>(rand()) /
+                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
+       auto z_rand = z - 0.1 +
+                     static_cast<float>(rand()) /
+                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));*/
 
       rw::math::Vector3D<double> pos_rand(x_rand, y_rand, z_rand);
 
       rw::math::Q q_rand = inverseKinematics(pos_rand, rpy);
 
+      /* if (count_collision > 9) {
+         deltaQ_max = qMax - q_rand - q_zero;
+         deltaQ_min = q_rand - qMin + q_zero;
+
+         auto min_delta_norm = (q_rand - qMin).norm2();
+         auto max_delta_norm = (qMax - q_rand).norm2();
+         auto min_delta =
+             max_delta_norm < min_delta_norm ? deltaQ_max : deltaQ_min;
+         // q_rand = count_collision%2==0 ? Math::ranQ(q_rand + deltaQ_min/2,
+         // q_rand) : Math::ranQ(q_rand, q_rand + deltaQ_max/2);
+         q_rand = Math::ranQ(q_rand - min_delta, q_rand + min_delta);
+         for(int i = 0; i < 6; i++){
+           if(q_rand[i]>2*3.1415){
+             q_rand[i] -= 2*3.1415;
+             q_rand[i] *= -1;
+           }else if(q_rand[i]<-2*3.1415){
+             q_rand[i] += 2*3.1415;
+             q_rand[i] *= -1;
+           }
+         }
+       }
+       cout << " count collison " << count_collision << endl;
+       */
       Q q_near = nearest_neigbor(q_rand, path);
       Q q_new;
 
       if (NewConfig(q_rand, q_near, q_new)) {
         path.push_back(q_new);
+        /* count_collision = 0;
+         cout << "qmin " << qMin << endl;
+         cout << "qmax " << qMax << endl;
+         cout << "qrand " << q_rand << endl;*/
+      } else {
+        // si no hemos añadido nueva configuracion
+        keep = true;
+        // count_collision++;
       }
 
       diferencia = q_new - q_goal;
@@ -299,11 +364,12 @@ class URRobot {
       dif2 = q_new - q2_limit;
       dif3 = q_new - q3_limit;
       dif4 = q_new - q4_limit;
-
-    } while (diferencia.norm2() > region && dif1.norm2() > region &&
-             dif2.norm2() > region && dif3.norm2() > region &&
-             dif4.norm2() > region);
-
+      /*  cout << " diferencia " << diferencia.norm2()<<endl;
+        cout << "region = 0.01 "<< endl;*/
+    } while ((diferencia.norm2() > region && dif1.norm2() > region &&
+              dif2.norm2() > region && dif3.norm2() > region &&
+              dif4.norm2() > region) ||
+             keep);
     cout << "Path of length " << path.size() << endl;
 
     for (QPath::iterator it = path.begin(); it < path.end(); it++) {
@@ -326,9 +392,16 @@ int main(int argc, char **argv) {
 
   std::cout << "Q inicial -> " << robot.getQ()
             << std::endl;  // para mostrar nada mas
-  // std::cout << robot.getPose() << std::endl;
-  rw::math::Q q_ini(6, -0.384695, -1.08527, 1.37812, -0.309625, 1.56999,
-                    0.0178859);
+                           // std::cout << robot.getPose() << std::endl;
+
+  // q robot real inicial
+  // rw::math::Q q_ini(6, -0.384695, -1.08527, 1.37812, -0.309625, 1.56999,
+  // 0.0178859);
+  // q robot simulacion
+  rw::math::Q q_ini(6, -1.6007, -1.7271, -2.203, -0.808, 1.5951, -0.031);
+
+  // rw::math::Q q_ini(6, -4.607, -2.482, -2.078, -2.965, 5.753, -2.851);
+  // rw::math::Q q_ini(6, 5.953,-0.899,1.477,5.554,-2.061,0.832);
   robot.setQ(q_ini);
 
   auto robot_transform = robot.getPose();  // Devuelve transform3D
