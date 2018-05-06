@@ -8,6 +8,7 @@ set (CMAKE_CXX_STANDARD 11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   roscpp
   roslib
   caros_common_msgs
@@ -15,6 +16,19 @@ find_package(catkin REQUIRED COMPONENTS
   caros_common
   caros_control
   std_msgs
+  geometry_msgs
+)
+
+add_service_files(
+  FILES
+  ResetQ.srv
+  Vision.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
 )
 
 ###################################
@@ -36,7 +50,7 @@ LINK_DIRECTORIES( ${ROBWORK_LIBRARY_DIRS} )
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rovi2_rob
-#  CATKIN_DEPENDS roscpp
+CATKIN_DEPENDS geometry_msgs std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -49,4 +63,4 @@ include_directories(
 
 add_executable(ur_caros_example src/ur_caros_example.cpp)
 target_link_libraries(ur_caros_example ${catkin_LIBRARIES} ${ROBWORK_LIBRARIES} ${ROS_LIBRARIES})
-add_dependencies(ur_caros_example caros_common_msgs caros_control_msgs caros_control)
+add_dependencies(ur_caros_example caros_common_msgs caros_control_msgs caros_control geometry_msgs)
