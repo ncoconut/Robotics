@@ -239,7 +239,7 @@ class URRobot {
 
     Q dq = q_rand - q_near;
     double extend = 0.4;
-    q_new = q_near + extend * (dq) / (dq.norm2());
+    q_new = q_rand;
     return checkCollisions(device, state, detector, q_new, q_near, extend);
     // cuando no choca -> true
   }
@@ -275,145 +275,29 @@ class URRobot {
     std::vector<rw::math::Q> path;
     path.push_back(getQ());
     rw::math::Q diferencia;
-    rw::math::Q dif1;
-    rw::math::Q dif2;
-    rw::math::Q dif3;
-    rw::math::Q dif4;
-    rw::math::Q deltaQ_max;
-    rw::math::Q deltaQ_min;
 
-    // double region = 0.1;
-    double region = 0.05;
     double region_q = 0.15;
 
-    rw::math::Vector3D<double> pos1(x + region, y + region, z);
-    rw::math::Vector3D<double> pos2(x - region, y + region, z);
-    rw::math::Vector3D<double> pos3(x - region, y - region, z);
-    rw::math::Vector3D<double> pos4(x + region, y - region, z);
 
-    rw::math::Q q1_limit = inverseKinematics(pos1, rpy);
-    rw::math::Q q2_limit = inverseKinematics(pos2, rpy);
-    rw::math::Q q3_limit = inverseKinematics(pos3, rpy);
-    rw::math::Q q4_limit = inverseKinematics(pos4, rpy);
 
-    auto qMin = device->getBounds().first;
-    auto qMax = device->getBounds().second;
-    // rw::math::Q q_zero(6, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05);
-    /* FORWARD KINEMATICS
-      State testState;
-[100%] Linking CXX executable /home/noelia/cat
-      testState = state;
-
-      device->setQ(qMin, testState);
-      auto endFrame = device->getEnd();
-      auto endTransform = device->baseTframe(endFrame, testState);
-      auto pos_min = endTransform.P();
-
-      device->setQ(qMax, testState);
-      endTransform = device->baseTframe(endFrame, testState);
-      auto pos_max = endTransform.P();*/
 
     int count_collision = 0;
     bool keep = false;
     do {
-      keep = false;
-      // TODO Set as constants
-      auto x_rand = x - 0.01 +
-                    static_cast<float>(rand()) /
-                        (static_cast<float>(RAND_MAX / (0.01 + 0.01)));
-      auto y_rand = y - 0.01 +
-                    static_cast<float>(rand()) /
-                        (static_cast<float>(RAND_MAX / (0.01 + 0.01)));
-      auto z_rand = z - 0.01 +
-                    static_cast<float>(rand()) /
-                        (static_cast<float>(RAND_MAX / (0.01 + 0.01)));
-      /* auto x_rand = x - 0.1 +
-                     static_cast<float>(rand()) /
-                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
-       auto y_rand = y - 0.1 +
-                     static_cast<float>(rand()) /
-                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
-       auto z_rand = z - 0.1 +
-                     static_cast<float>(rand()) /
-                         (static_cast<float>(RAND_MAX / (0.1 + 0.1)));
-*/
-      rw::math::Vector3D<double> pos_rand(x_rand, y_rand, z_rand);
 
-      rw::math::Q q_rand = inverseKinematics(pos_rand, rpy);
-      //  cout << "qrand " << q_rand << endl;
-      if (count_collision > 9) {
-        deltaQ_max = qMax - q_rand;
-        deltaQ_min = q_rand - qMin;
-
-        auto min_delta_norm = (q_rand - qMin).norm2();
-        auto max_delta_norm = (qMax - q_rand).norm2();
-        auto min_delta =
-            max_delta_norm < min_delta_norm ? deltaQ_max : deltaQ_min;
-        // q_rand = count_collision%2==0 ? Math::ranQ(q_rand + deltaQ_min/2,
-        // q_rand) : Math::ranQ(q_rand, q_rand + deltaQ_max/2);
-        // cout << "min_delta_norm " << min_delta_norm << endl;
-        // cout << "max_delta_norm " << max_delta_norm << endl;
-        // cout << "min_delta " << min_delta << endl;
-        q_rand = Math::ranQ(q_rand - min_delta, q_rand + min_delta);
-
-        /*auto delta_Q = (qMax-qMin)/2;
-        auto delta = (delta_Q).norm2();
-        q_rand = Math::ranQ(q_rand - delta_Q, q_rand + delta_Q);*/
-
-        for (int i = 0; i < 6; i++) {
-          if (q_rand[i] > 2 * 3.1415) {
-            q_rand[i] -= 2 * 3.1415;
-            q_rand[i] *= -1;
-          } else if (q_rand[i] < -2 * 3.1415) {
-            q_rand[i] += 2 * 3.1415;
-            q_rand[i] *= -1;
-          }
-        }
-        //  cout << "qrand nuevo" << q_rand << endl;
-      }
-
-      Q q_near = nearest_neigbor(q_rand, path);
+      Q q_near = nearest_neigbor(q_goal, path);
+      
       Q q_new;
 
-      if (NewConfig(q_rand, q_near, q_new)) {
+      if (NewConfig(q_goal, q_near, q_new)) {
         path.push_back(q_new);
-        // cout << path.size() <<endl;
-        cout << " count collison " << count_collision << endl;
-        count_collision = 0;
-        /*
-         cout << "qmin " << qMin << endl;
-         cout << "qmax " << qMax << endl;
-         cout << "qrand " << q_rand << endl;*/
-      } else {
-        // si no hemos añadido nueva configuracion
-        keep = true;
-        count_collision++;
-      }
+      } 
 
       diferencia = q_new - q_goal;
-      dif1 = q_new - q1_limit;
-      dif2 = q_new - q2_limit;
-      dif3 = q_new - q3_limit;
-      dif4 = q_new - q4_limit;
-      /*  cout << " diferencia " << diferencia.norm2()<<endl;
-         cout << " diferencia1 " << dif1.norm2()<<endl;
-         cout << " diferencia2 " << dif2.norm2()<<endl;
-         cout << " diferencia3 " << dif3.norm2()<<endl;
-         cout << " diferencia4 " << dif4.norm2()<<endl;
-                cout << "region = 0.01 "<< endl;*/
 
-    } while ((diferencia.norm2() > region_q && dif1.norm2() > region_q &&
-              dif2.norm2() > region_q && dif3.norm2() > region_q &&
-              dif4.norm2() > region_q) ||
-             keep);
-    auto finish = std::chrono::steady_clock::now();
-    auto time =
-        std::chrono::duration_cast<std::chrono::milliseconds>(finish - start)
-            .count();
-    ulong planner_time = time;
-    /* cout << "Time: " << planner_time << endl;
-     cout << "Path of length " << path.size() << endl;*/
-    // cout << "x, y, z" << getPose().P() << endl;
+    } while (diferencia.norm2() > region_q );
+
+
     for (QPath::iterator it = path.begin(); it < path.end(); it++) {
       // cout << *it << endl;
       // cout << "set Q " << *it << endl;
