@@ -38,15 +38,16 @@ class URRobot {
   rw::math::Transform3D<double> t_home;
   ros::ServiceServer _vision_subscriber;
   ros::ServiceServer _reset_subscriber;
+  double extend = 0.4;
   // rw::invkin::JacobianIKSolver *solver;
 
  public:
   URRobot(ros::NodeHandle n) : nh(n) {
     auto packagePath = ros::package::getPath("ur_caros_example");
-    /*wc = rw::loaders::WorkCellLoader::Factory::load(
-        packagePath + "/WorkStation_1_modificada/WC1_Scene.wc.xml");*/
     wc = rw::loaders::WorkCellLoader::Factory::load(
-        packagePath + "/WorkStation_1/WC1_Scene.wc.xml");
+        packagePath + "/WorkStation_1_modificada/WC1_Scene.wc.xml");
+    /* wc = rw::loaders::WorkCellLoader::Factory::load(
+         packagePath + "/WorkStation_1/WC1_Scene.wc.xml");*/
     device = wc->findDevice("UR1");
     state = wc->getDefaultState();
     robot = new caros::SerialDeviceSIProxy(nh, "caros_universalrobot");
@@ -238,7 +239,6 @@ class URRobot {
         wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
 
     Q dq = q_rand - q_near;
-    double extend = 0.4;
     q_new = q_near + extend * (dq) / (dq.norm2());
     return checkCollisions(device, state, detector, q_new, q_near, extend);
     // cuando no choca -> true
@@ -285,6 +285,8 @@ class URRobot {
     // double region = 0.1;
     double region = 0.05;
     double region_q = 0.15;
+    int fit = 0;
+    int max_iteration;
 
     rw::math::Vector3D<double> pos1(x + region, y + region, z);
     rw::math::Vector3D<double> pos2(x - region, y + region, z);
@@ -315,6 +317,7 @@ class URRobot {
 
     int count_collision = 0;
     bool keep = false;
+    max_iteration = 100000;
     do {
       keep = false;
       // TODO Set as constants
@@ -341,7 +344,7 @@ class URRobot {
 
       rw::math::Q q_rand = inverseKinematics(pos_rand, rpy);
       //  cout << "qrand " << q_rand << endl;
-      if (count_collision > 9) {
+      if (count_collision > 3) {
         deltaQ_max = qMax - q_rand;
         deltaQ_min = q_rand - qMin;
 
@@ -395,48 +398,64 @@ class URRobot {
       dif2 = q_new - q2_limit;
       dif3 = q_new - q3_limit;
       dif4 = q_new - q4_limit;
-      /*  cout << " diferencia " << diferencia.norm2()<<endl;
-         cout << " diferencia1 " << dif1.norm2()<<endl;
-         cout << " diferencia2 " << dif2.norm2()<<endl;
-         cout << " diferencia3 " << dif3.norm2()<<endl;
-         cout << " diferencia4 " << dif4.norm2()<<endl;
-                cout << "region = 0.01 "<< endl;*/
-
+   /*   cout << " diferencia " << diferencia.norm2() << endl;
+      cout << " diferencia1 " << dif1.norm2() << endl;
+      cout << " diferencia2 " << dif2.norm2() << endl;
+      cout << " diferencia3 " << dif3.norm2() << endl;
+      cout << " diferencia4 " << dif4.norm2() << endl;*/
+      /*cout << "region = 0.01 "<< endl;*/
+      if (!keep &&
+          (diferencia.norm2() < 0.25 || dif1.norm2() < 0.25 ||
+           dif2.norm2() < 0.25 || dif3.norm2() < 0.25 || dif4.norm2() < 0.25)) {
+        fit++;
+        if (fit > 5) {
+          extend -= 0.01;
+          fit = 0;
+          ROS_INFO("FIT Changed!");
+        }
+      }
+      max_iteration--;
     } while ((diferencia.norm2() > region_q && dif1.norm2() > region_q &&
               dif2.norm2() > region_q && dif3.norm2() > region_q &&
               dif4.norm2() > region_q) ||
-             keep);
+             keep && max_iteration > 0);
     auto finish = std::chrono::steady_clock::now();
     auto time =
         std::chrono::duration_cast<std::chrono::milliseconds>(finish - start)
             .count();
     ulong planner_time = time;
-    /* cout << "Time: " << planner_time << endl;
-     cout << "Path of length " << path.size() << endl;*/
+    cout << "Time: " << planner_time << endl;
+    cout << "Path of length: " << path.size() << endl;
+    cout << "Iteration: " << max_iteration << endl;
+    cout << "Extend: " << extend << endl;
     // cout << "x, y, z" << getPose().P() << endl;
     for (QPath::iterator it = path.begin(); it < path.end(); it++) {
       // cout << *it << endl;
       // cout << "set Q " << *it << endl;
       setQ(*it);
-      // cout << "x, y, z" << getPose().P() << endl;
+      cout << "x, y, z" << getPose().P() << endl;
     }
     res.success = true;
 
     return true;
   }
   void initialize() {
-    //q_home = getQ();
+    // std::srand(1);
+    // q_home = getQ();
     t_home = getPose();
-    //cout << "New Q_HOME: " << q_home << endl;
+    // cout << "New Q_HOME: " << q_home << endl;
     // q robot real inicial
     /*rw::math::Q q_ini(6, -0.384695, -1.08527, 1.37812, -0.309625, 1.56999,
                     0.0178859);*/
-    rw::math::Q q_ini(6, 0.103016, -1.55723, 1.60104, -0.0104208, 1.69122, 0.687377);
+    // rw::math::Q q_ini(6, 0.103016, -1.55723, 1.60104, -0.0104208, 1.69122,
+    // 0.687377);
 
     // rw::math::Q q_ini(6,);
-    //  rw::math::Q q_ini(6, 1.435 ,-1.040, -4.380, -0.883, 1.551, 0 );
+    rw::math::Q q_ini(6, 1.435, -1.040, -4.380, -0.883, 1.551, 0);
     // q robot simulacion
     // rw::math::Q q_ini(6, -1.6007, -1.7271, -2.203, -0.808, 1.5951, -0.031);
+    // rw::math::Q q_ini(6,1.435, -1.040, -4.380 ,-0.883, 2.295, 0 );
+
     q_home = q_ini;
     sendHome();
   }
