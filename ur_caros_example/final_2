@@ -159,3 +159,484 @@ x, y, zVector3D(-0.327003, -0.519381, 0.175171)
 x, y, zVector3D(-0.456038, -0.413962, 0.107641)
 x, y, zVector3D(-0.546425, -0.274591, 0.0504729)
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*******************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Test 2 - 0.25 workspace 
+
+A /////////////////////
+Time: 9900
+Path of length: 67
+Iteration: 99918
+Extend: 0.3
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.101656, -0.562333, 0.019437)
+x, y, zVector3D(-0.100874, -0.549497, 0.105412)
+x, y, zVector3D(-0.1887, -0.517426, 0.123154)
+x, y, zVector3D(-0.33229, -0.440084, 0.115049)
+x, y, zVector3D(-0.445537, -0.319228, 0.110885)
+x, y, zVector3D(-0.508184, -0.167865, 0.102281)
+x, y, zVector3D(-0.536172, -0.00176297, 0.094822)
+x, y, zVector3D(-0.498164, -0.163382, 0.0819724)
+x, y, zVector3D(-0.504222, -0.16598, 0.122023)
+x, y, zVector3D(-0.526002, -0.00672554, 0.103778)
+x, y, zVector3D(-0.51162, -0.16696, 0.10034)
+x, y, zVector3D(-0.531609, -0.164666, 0.108271)
+x, y, zVector3D(-0.531372, -0.00811404, 0.102792)
+x, y, zVector3D(-0.494858, -0.164715, 0.100357)
+x, y, zVector3D(-0.492245, -0.158435, 0.099307)
+x, y, zVector3D(-0.495443, -0.165045, 0.110393)
+x, y, zVector3D(-0.514509, -0.165832, 0.100912)
+x, y, zVector3D(-0.496762, -0.154495, 0.0820463)
+x, y, zVector3D(-0.490113, -0.143897, 0.0867734)
+x, y, zVector3D(-0.49723, -0.153168, 0.0903299)
+x, y, zVector3D(-0.507422, -0.164304, 0.104433)
+x, y, zVector3D(-0.519865, -0.164373, 0.0813921)
+x, y, zVector3D(-0.525475, -0.163309, 0.0952478)
+x, y, zVector3D(-0.523093, -0.0158325, 0.11657)
+x, y, zVector3D(-0.535383, -0.0090958, 0.10083)
+x, y, zVector3D(-0.514092, -0.141163, 0.0961579)
+x, y, zVector3D(-0.51442, -0.161561, 0.0881262)
+x, y, zVector3D(-0.527498, -0.157759, 0.0685971)
+x, y, zVector3D(-0.514929, -0.0190497, 0.112998)
+x, y, zVector3D(-0.513186, -0.160546, 0.0914567)
+x, y, zVector3D(-0.527921, -0.15173, 0.0757099)
+x, y, zVector3D(-0.514695, -0.0180016, 0.105659)
+x, y, zVector3D(-0.544146, -0.0142901, 0.11596)
+x, y, zVector3D(-0.523887, -0.155891, 0.10117)
+x, y, zVector3D(-0.528552, -0.143117, 0.073643)
+x, y, zVector3D(-0.529312, -0.150995, 0.077221)
+x, y, zVector3D(-0.535761, -0.0239688, 0.118496)
+x, y, zVector3D(-0.520067, -0.15157, 0.0926283)
+x, y, zVector3D(-0.528682, -0.162212, 0.0968683)
+x, y, zVector3D(-0.527363, -0.144535, 0.0782383)
+x, y, zVector3D(-0.513357, -0.0241059, 0.118741)
+x, y, zVector3D(-0.527889, -0.162471, 0.0942354)
+x, y, zVector3D(-0.514599, -0.0250032, 0.106257)
+x, y, zVector3D(-0.542743, -0.133807, 0.088741)
+x, y, zVector3D(-0.540825, -0.142343, 0.0935698)
+x, y, zVector3D(-0.509173, -0.0259377, 0.0925144)
+x, y, zVector3D(-0.540377, -0.132962, 0.0972719)
+x, y, zVector3D(-0.516137, -0.142158, 0.0921845)
+x, y, zVector3D(-0.522156, -0.0133989, 0.0857742)
+x, y, zVector3D(-0.527572, -0.134791, 0.0938229)
+x, y, zVector3D(-0.522351, -0.134738, 0.0961575)
+x, y, zVector3D(-0.52817, -0.132808, 0.0961918)
+x, y, zVector3D(-0.526274, -0.0198705, 0.091225)
+x, y, zVector3D(-0.513735, -0.0162973, 0.0841104)
+x, y, zVector3D(-0.515915, -0.148961, 0.109686)
+x, y, zVector3D(-0.534127, -0.137525, 0.0986091)
+x, y, zVector3D(-0.538677, -0.0233553, 0.0689372)
+x, y, zVector3D(-0.527112, -0.020417, 0.0920996)
+x, y, zVector3D(-0.535128, -0.132454, 0.10447)
+x, y, zVector3D(-0.513468, -0.0269239, 0.0779616)
+x, y, zVector3D(-0.523844, -0.137915, 0.122639)
+x, y, zVector3D(-0.528357, -0.0315503, 0.0878827)
+x, y, zVector3D(-0.52299, -0.154083, 0.102829)
+x, y, zVector3D(-0.533472, -0.128525, 0.1098)
+x, y, zVector3D(-0.517734, -0.0264489, 0.0731321)
+x, y, zVector3D(-0.523822, -0.0287392, 0.0810917)
+
+B /////////////////////
+ count collison 0
+ count collison 9
+ count collison 0
+ count collison 0
+ count collison 0
+Time: 1816
+Path of length: 6
+Iteration: 99986
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.106665, -0.590919, 0.0314075)
+x, y, zVector3D(-0.0868465, -0.58994, 0.132427)
+x, y, zVector3D(-0.261488, -0.562915, 0.135108)
+x, y, zVector3D(-0.425052, -0.476204, 0.134568)
+x, y, zVector3D(-0.556994, -0.337772, 0.138537)
+
+C /////////////////////
+
+ count collison 0
+ count collison 9
+ count collison 5
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 0
+ count collison 0
+Time: 4336
+Path of length: 9
+Iteration: 99965
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.107219, -0.575893, 0.0132383)
+x, y, zVector3D(-0.087484, -0.573952, 0.106686)
+x, y, zVector3D(-0.181909, -0.550355, 0.118454)
+x, y, zVector3D(-0.0920089, -0.608133, 0.290548)
+x, y, zVector3D(-0.114699, -0.665923, 0.201989)
+x, y, zVector3D(-0.244572, -0.503436, 0.214037)
+x, y, zVector3D(-0.415912, -0.414229, 0.128678)
+x, y, zVector3D(-0.535724, -0.262577, 0.0388563)
+D /////////////////////
+ count collison 0
+ count collison 9
+ count collison 5
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 4
+ count collison 4
+ count collison 0
+Time: 5358
+Path of length: 10
+Iteration: 99956
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.0920068, -0.629806, 0.0019461)
+x, y, zVector3D(-0.0314235, -0.646937, 0.113946)
+x, y, zVector3D(-0.120668, -0.653758, 0.124597)
+x, y, zVector3D(0.072912, -0.650992, 0.202707)
+x, y, zVector3D(0.110042, -0.719634, 0.122769)
+x, y, zVector3D(-0.185344, -0.631484, 0.278231)
+x, y, zVector3D(-0.319465, -0.603603, 0.174631)
+x, y, zVector3D(-0.46763, -0.560913, 0.117537)
+x, y, zVector3D(-0.533746, -0.575219, -0.0194591)
+E /////////////////////
+
+ count collison 1
+ count collison 13
+ count collison 10
+ count collison 15
+ count collison 6
+ count collison 5
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+[ INFO] [1526047977.519958592]: FIT Changed!
+Time: 7719
+Path of length: 15
+Iteration: 99936
+Extend: 0.39
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.106596, -0.58715, -0.0144951)
+x, y, zVector3D(0.00990331, -0.643274, 0.197437)
+x, y, zVector3D(-0.0876687, -0.634403, 0.298159)
+x, y, zVector3D(-0.171789, -0.607782, 0.389241)
+x, y, zVector3D(-0.251824, -0.625142, 0.400672)
+x, y, zVector3D(-0.438721, -0.558292, 0.304284)
+x, y, zVector3D(-0.529995, -0.495947, 0.16999)
+x, y, zVector3D(-0.590201, -0.410766, 0.0475809)
+x, y, zVector3D(-0.608457, -0.308148, -0.075706)
+x, y, zVector3D(-0.59673, -0.190734, -0.153347)
+x, y, zVector3D(-0.608762, -0.320691, -0.091504)
+x, y, zVector3D(-0.606017, -0.313013, -0.115768)
+x, y, zVector3D(-0.602236, -0.309892, -0.105444)
+x, y, zVector3D(-0.580332, -0.303979, -0.0860875)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*******************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Test 2 - 0.5 workspace 
+
+A /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 0
+ count collison 4
+ count collison 3
+ count collison 0
+ count collison 0
+ count collison 0
+Time: 3510
+Path of length: 10
+Iteration: 99972
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.101656, -0.562333, 0.019437)
+x, y, zVector3D(-0.0552198, -0.590428, 0.109638)
+x, y, zVector3D(-0.0500658, -0.553274, 0.118509)
+x, y, zVector3D(-0.200463, -0.517983, 0.113325)
+x, y, zVector3D(-0.0634215, -0.528292, 0.0386589)
+x, y, zVector3D(-0.334798, -0.439396, 0.109558)
+x, y, zVector3D(-0.438049, -0.32489, 0.105159)
+x, y, zVector3D(-0.504679, -0.185791, 0.10242)
+x, y, zVector3D(-0.54118, -0.0355625, 0.107259)
+B /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+Time: 2416
+Path of length: 8
+Iteration: 99981
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.106665, -0.590919, 0.0314075)
+x, y, zVector3D(-0.0312428, -0.599995, 0.104041)
+x, y, zVector3D(-0.0393192, -0.586977, 0.139289)
+x, y, zVector3D(-0.214884, -0.574299, 0.142361)
+x, y, zVector3D(-0.38561, -0.505103, 0.141573)
+x, y, zVector3D(-0.533316, -0.384309, 0.140404)
+x, y, zVector3D(-0.62334, -0.203416, 0.121808)
+C /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 5
+ count collison 1
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 0
+ count collison 0
+Time: 5040
+Path of length: 11
+Iteration: 99959
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.107219, -0.575893, 0.0132383)
+x, y, zVector3D(-0.0334408, -0.597759, 0.100315)
+x, y, zVector3D(-0.040694, -0.574439, 0.117371)
+x, y, zVector3D(-0.104641, -0.559485, 0.138323)
+x, y, zVector3D(-0.284798, -0.513344, 0.104892)
+x, y, zVector3D(0.022724, -0.61712, 0.293914)
+x, y, zVector3D(0.0857146, -0.669877, 0.24756)
+x, y, zVector3D(-0.292322, -0.473547, 0.228711)
+x, y, zVector3D(-0.458748, -0.377119, 0.131285)
+x, y, zVector3D(-0.57422, -0.229871, 0.0201011)
+D /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 5
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 4
+ count collison 0
+ count collison 4
+ count collison 0
+Time: 5952
+Path of length: 12
+Iteration: 99951
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.0920068, -0.629806, 0.0019461)
+x, y, zVector3D(-0.0055981, -0.606475, 0.088941)
+x, y, zVector3D(0.00361204, -0.634807, 0.120427)
+x, y, zVector3D(-0.0511778, -0.635909, 0.144257)
+x, y, zVector3D(0.0767537, -0.632893, 0.268247)
+x, y, zVector3D(0.179627, -0.678386, 0.207944)
+x, y, zVector3D(-0.075094, -0.608266, 0.303124)
+x, y, zVector3D(-0.19532, -0.602307, 0.221116)
+x, y, zVector3D(-0.344278, -0.621863, 0.128254)
+x, y, zVector3D(-0.493971, -0.550285, 0.106264)
+x, y, zVector3D(-0.543129, -0.574942, -0.0211379)
+E /////////////////////
+ count collison 1
+ count collison 4
+ count collison 8
+ count collison 5
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 0
+ count collison 8
+ count collison 4
+ count collison 5
+ count collison 4
+ count collison 11
+ count collison 6
+ count collison 5
+ count collison 0
+ count collison 0
+Time: 10901
+Path of length: 18
+Iteration: 99909
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.106596, -0.58715, -0.0144951)
+x, y, zVector3D(-0.0352496, -0.605859, 0.0913563)
+x, y, zVector3D(-0.0403227, -0.595028, 0.0937749)
+x, y, zVector3D(-0.109147, -0.586128, 0.106497)
+x, y, zVector3D(0.0223467, -0.632368, 0.284713)
+x, y, zVector3D(0.08308, -0.689334, 0.216942)
+x, y, zVector3D(-0.149508, -0.557095, 0.229255)
+x, y, zVector3D(-0.335366, -0.528187, 0.129271)
+x, y, zVector3D(0.0501933, -0.640707, 0.394324)
+x, y, zVector3D(-0.0834111, -0.539612, 0.0456339)
+x, y, zVector3D(0.0757282, -0.568461, 0.0166499)
+x, y, zVector3D(-0.171884, -0.595506, 0.0643426)
+x, y, zVector3D(-0.364616, -0.515627, 0.302755)
+x, y, zVector3D(0.0486376, -0.614651, 0.493765)
+x, y, zVector3D(-0.534362, -0.388152, 0.227098)
+x, y, zVector3D(-0.599834, -0.309224, 0.0154344)
+x, y, zVector3D(-0.608124, -0.233227, -0.158435)
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*******************************************************************************************************/
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Test 2 - 0.75 workspace 
+
+A /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 0
+ count collison 0
+ count collison 3
+ count collison 0
+ count collison 0
+Time: 2889
+Path of length: 9
+Iteration: 99977
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.101656, -0.562333, 0.019437)
+x, y, zVector3D(-0.0223722, -0.591136, 0.104811)
+x, y, zVector3D(-0.0298379, -0.553936, 0.121709)
+x, y, zVector3D(-0.181604, -0.524439, 0.115907)
+x, y, zVector3D(-0.320405, -0.452374, 0.109557)
+x, y, zVector3D(-0.431635, -0.341289, 0.106976)
+x, y, zVector3D(-0.498502, -0.202856, 0.101322)
+x, y, zVector3D(-0.53326, -0.0475825, 0.0976052)
+B /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 0
+ count collison 0
+ count collison 0
+ count collison 0
+Time: 2423
+Path of length: 8
+Iteration: 99981
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.106665, -0.590919, 0.0314075)
+x, y, zVector3D(-0.00653993, -0.594919, 0.0978049)
+x, y, zVector3D(-0.0217836, -0.58502, 0.140233)
+x, y, zVector3D(-0.197062, -0.578065, 0.143159)
+x, y, zVector3D(-0.369404, -0.514528, 0.142286)
+x, y, zVector3D(-0.520459, -0.398518, 0.140928)
+x, y, zVector3D(-0.617699, -0.221617, 0.123764)
+C /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 5
+ count collison 0
+ count collison 5
+ count collison 4
+ count collison 4
+ count collison 0
+ count collison 0
+Time: 4927
+Path of length: 11
+Iteration: 99960
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.107219, -0.575893, 0.0132383)
+x, y, zVector3D(-0.00779339, -0.594569, 0.0965505)
+x, y, zVector3D(-0.0237613, -0.573764, 0.11973)
+x, y, zVector3D(-0.0716339, -0.56045, 0.144823)
+x, y, zVector3D(-0.253525, -0.524417, 0.11063)
+x, y, zVector3D(0.0609465, -0.610133, 0.274502)
+x, y, zVector3D(0.148525, -0.64784, 0.245069)
+x, y, zVector3D(-0.250854, -0.488087, 0.237144)
+x, y, zVector3D(-0.42497, -0.408186, 0.146387)
+x, y, zVector3D(-0.552545, -0.259496, 0.0466815)
+D /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 4
+ count collison 4
+ count collison 5
+ count collison 5
+ count collison 4
+ count collison 7
+ count collison 4
+ count collison 6
+ count collison 4
+ count collison 10
+ count collison 6
+ count collison 7
+ count collison 4
+ count collison 4
+ count collison 5
+ count collison 0
+ count collison 2
+Time: 13521
+Path of length: 21
+Iteration: 99887
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.0920068, -0.629806, 0.0019461)
+x, y, zVector3D(0.0102835, -0.596763, 0.0864464)
+x, y, zVector3D(0.107822, -0.578049, 0.196523)
+x, y, zVector3D(0.152903, -0.58152, 0.092286)
+x, y, zVector3D(-0.125062, -0.631815, 0.0399229)
+x, y, zVector3D(0.183674, -0.560189, 0.356632)
+x, y, zVector3D(-0.133886, -0.627607, 0.211064)
+x, y, zVector3D(-0.238036, -0.604655, 0.13422)
+x, y, zVector3D(0.191285, -0.488226, 0.504242)
+x, y, zVector3D(-0.0241042, -0.575571, 0.131266)
+x, y, zVector3D(-0.0530843, -0.628238, 0.145811)
+x, y, zVector3D(-0.184346, -0.551295, 0.180664)
+x, y, zVector3D(-0.126101, -0.608328, 0.418763)
+x, y, zVector3D(0.214461, -0.452198, 0.591744)
+x, y, zVector3D(0.224261, -0.290904, 0.705318)
+x, y, zVector3D(-0.182421, -0.560961, 0.286386)
+x, y, zVector3D(-0.0794181, -0.650801, -0.0164082)
+x, y, zVector3D(-0.309699, -0.490174, 0.181866)
+x, y, zVector3D(-0.417521, -0.539512, 0.103597)
+x, y, zVector3D(-0.514161, -0.564466, -0.000310501)
+E /////////////////////
+ count collison 0
+ count collison 4
+ count collison 8
+ count collison 4
+ count collison 6
+ count collison 5
+ count collison 8
+ count collison 4
+ count collison 6
+ count collison 11
+ count collison 0
+ count collison 5
+ count collison 0
+ count collison 0
+Time: 9092
+Path of length: 15
+Iteration: 99925
+Extend: 0.4
+x, y, zVector3D(0.0344434, -0.565056, 0.00816154)
+x, y, zVector3D(-0.107013, -0.587345, -0.012943)
+x, y, zVector3D(-0.00811374, -0.59831, 0.0920112)
+x, y, zVector3D(0.073603, -0.580972, 0.201486)
+x, y, zVector3D(0.0962537, -0.58804, 0.0726679)
+x, y, zVector3D(0.13748, -0.565027, 0.373215)
+x, y, zVector3D(-0.136145, -0.589242, 0.125502)
+x, y, zVector3D(0.134411, -0.490422, 0.509717)
+x, y, zVector3D(-0.0375025, -0.530818, 0.0475993)
+x, y, zVector3D(-0.0963025, -0.588817, 0.0707797)
+x, y, zVector3D(-0.158106, -0.585578, 0.310809)
+x, y, zVector3D(-0.329568, -0.559078, 0.195438)
+x, y, zVector3D(-0.477607, -0.467622, 0.167539)
+x, y, zVector3D(-0.562731, -0.379993, 0.0285699)
+x, y, zVector3D(-0.60141, -0.262583, -0.105884)
+
