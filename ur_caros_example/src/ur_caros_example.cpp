@@ -305,7 +305,8 @@ class URRobot {
       // cout << "x, y, z" << getPose().P() << endl;
     }
     res.success = true;
-
+    ros::Duration(0.5).sleep();
+    sendHome();
     return true;
   }
   void initialize() {
