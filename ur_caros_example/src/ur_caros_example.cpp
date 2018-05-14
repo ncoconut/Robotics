@@ -1,13 +1,12 @@
-#include <iostream>
-#include "caros/serial_device_si_proxy.h"
-#include "ros/package.h"
-#include "rw/rw.hpp"
-//#include "rw/invkin.hpp"
 #include <chrono>
+#include <iostream>
 #include <rw/invkin/JacobianIKSolver.hpp>
 #include <rwlibs/pathplanners/rrt/RRTPlanner.hpp>
 #include <rwlibs/pathplanners/rrt/RRTQToQPlanner.hpp>
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>
+#include "caros/serial_device_si_proxy.h"
+#include "ros/package.h"
+#include "rw/rw.hpp"
 #include "ur_caros_example/ResetQ.h"
 #include "ur_caros_example/Vision.h"
 
@@ -38,13 +37,10 @@ class URRobot {
   rw::math::Transform3D<double> t_home;
   ros::ServiceServer _vision_subscriber;
   ros::ServiceServer _reset_subscriber;
-  // rw::invkin::JacobianIKSolver *solver;
 
  public:
   URRobot(ros::NodeHandle n) : nh(n) {
     auto packagePath = ros::package::getPath("ur_caros_example");
-    /*wc = rw::loaders::WorkCellLoader::Factory::load(
-        packagePath + "/WorkStation_1_modificada/WC1_Scene.wc.xml");*/
     wc = rw::loaders::WorkCellLoader::Factory::load(
         packagePath + "/WorkStation_1/WC1_Scene.wc.xml");
     device = wc->findDevice("UR1");
@@ -57,8 +53,6 @@ class URRobot {
         "caros_serial_device_service_interface/"
         "robot_state",
         nh);
-    // init q_home to its basic configuration
-    // q_home = {};
     ros::spinOnce();
   }
 
@@ -81,7 +75,6 @@ class URRobot {
     if (solutions.size() < 1) ROS_ERROR("Solver hasn't found a solution!!");
     if (solutions.size() > 0) {
       q_inverse = solutions[0];
-      // cout << "Q inverse " << q_inverse << endl;
     }
     return q_inverse;
   }
@@ -90,20 +83,12 @@ class URRobot {
   bool setQ(Q q) {
     // Tell robot to move to joint config q
     float speed = 1;
-    /*std::cout << "dentro de setQ .>  q :" << std::endl << q << std::endl <<
-     * std::endl;*/
     if (robot->moveServoQ(q, speed)) {
-      // std::cout << "If setQ :" << std::endl;
-      // moveServoQ terminates before the robot is at the destination, so wait
-      // until it is
       Q qCurrent;
       do {
-        // std::cout << "Current joint config:" << std::endl << robot->getQ() <<
-        // std::endl << std::endl;
         ros::spinOnce();
         qCurrent = robot->getQ();
       } while ((qCurrent - q).norm2() > 0.01);
-      // std::cout << "antes de device (SET Q) " << std::endl;
       device->setQ(q, state);
       return true;
     } else
@@ -112,74 +97,22 @@ class URRobot {
 
   bool setPose(rw::math::Vector3D<double> pos, RPY<double> angles) {
     ros::spinOnce();
-    // std::cout <<"RPY UNO: "<<angles[0]<<" "<<angles[1]<<"
-    // "<<angles[2]<<std::endl;  std::cout <<"POS UNO: "<<pos[0]<<" "<<pos[1]<<"
-    // "<<pos[2]<<std::endl;
-    rw::kinematics::Frame *tool_frame =
-        device->getEnd();  // = wc->findFrame("PG70.TCP");
-                           //
-    /*std::vector<rw::kinematics::Frame*> frames = wc->getFrames();
+    rw::kinematics::Frame *tool_frame = device->getEnd();
 
-    for(int i = 0; i < frames.size(); i++){
-            std::cout<<frames[i]->name<<std::endl;
-    }*/
     if (tool_frame == nullptr) {
       RW_THROW("Tool frame not found!");
     }
     rw::math::Q solution = inverseKinematics(pos, angles);
     setQ(solution);
-    /*
-    rw::math::Transform3D<double> baseTtool_desired(pos, angles.toRotation3D());
-    // The inverse kinematics algorithm needs to know about the device, the tool
-    // frame and the desired pose. These parameters are const since they are not
-    // changed by inverse kinematics We pass the state and the configuration, q,
-    // as value so we have copies that we can change as we want during the
-    // inverse kinematics.
-
-
-
-    auto solver = new rw::invkin::JacobianIKSolver(device, state);
-    // auto solver = rw::invkin::JacobianIKSolver(device, state);
-    // auto solution = solver.solve(baseTtool_desired,state);
-    std::vector<rw::math::Q> solution = solver->solve(baseTtool_desired, state);
-    for (size_t k = 0; k < solution.size(); k++) {
-      std::cout << "solution solve inkin " << k << " -> " << solution[k]
-                << std::endl;
-    }
-    if (solution.size() > 0) {
-
-    }*/
-
-    /*rw::math::Q q_algo =
-        algorithm1(device, state, tool_frame, baseTtool_desired, getQ());*/
 
     return true;
   }
 
   rw::math::Transform3D<double> getPose() {
-    // spinOnce processes one batch of messages, calling all the callbacks
-
-    // rw::math::Pose6D<double> pose = rw::math::Pose6D::getPos();
-    // Vector3D<double> pos = device->getPos();
-    // EAA<double> eaa = device->getEAA();
-    // rw::math::Transform3D<double> transformacion = device->baseTframe;
-    // Q q = getQ();
-    // device(q, state);
-    /*auto* tcp = wc->findFrame("Joint4");
-    auto name = device->getName();
-    std::cout << "frames " << std::endl << tcp << std::endl << std::endl;
-    std::cout << "name " << std::endl << name << std::endl << std::endl;*/
-
     ros::spinOnce();
-    auto endFrame = device->getEnd();  // wc->findFrame("PG70.TCP");
+    auto endFrame = device->getEnd();
     auto endTransform = device->baseTframe(endFrame, state);
-    // cout << "end transform . R " <<endTransform.R()<< endl;
-    /*auto rpy = RPY<double>(endTransform.R());
-    auto pos = endTransform.P();
-    std::cout << "POS: " << pos[0] << " " << pos[1] << " " << pos[2] <<
-    std::endl; std::cout << "RPY: " << rpy[2] << " " << rpy[1] << " " << rpy[0]
-    << std::endl; cout << "RPY_intercambiado -> debe coincidir con los valores
-    del simulador" << endl;*/
+
     return endTransform;
   }
 
@@ -190,8 +123,6 @@ class URRobot {
     CollisionDetector::QueryResult data;
     bool colFrom;
 
-    // algoritmo 1 check collision // dividimos el edge en 3 y comprobamos esos
-    // tres puntos
     double epsilon = extend / 5;
     rw::math::Q delta_q = q_new - q_near;
     double norm = delta_q.norm2();
@@ -203,12 +134,8 @@ class URRobot {
       device->setQ(q, testState);
       colFrom = detector.inCollision(testState, &data);
       if (colFrom) {
-        //  cerr << "Configuration in collision: " << q << endl;
-        // cerr << "Colliding frames: " << endl;
         FramePairSet fps = data.collidingFrames;
         for (FramePairSet::iterator it = fps.begin(); it != fps.end(); it++) {
-          //    cerr << (*it).first->getName() << " " << (*it).second->getName()
-          //       << endl;
         }
         return false;
       }
@@ -248,11 +175,6 @@ class URRobot {
 
   bool setHomeAndReset(ur_caros_example::ResetQ::Request &req,
                        ur_caros_example::ResetQ::Response &res) {
-    /*if (req.data) {
-      q_home = getQ();
-      // cout << "New Q_HOME: " << q_home << endl;
-      sendHome();
-    }*/
     q_home = getQ();
     cout << "New Q_HOME: " << q_home << endl;
     res.success = true;
@@ -278,24 +200,20 @@ class URRobot {
 
     double region_q = 0.15;
 
-
-
-
     int count_collision = 0;
     bool keep = false;
     do {
-
       Q q_near = nearest_neigbor(q_goal, path);
-      
+
       Q q_new;
 
       if (NewConfig(q_goal, q_near, q_new)) {
         path.push_back(q_new);
-      } 
+      }
 
       diferencia = q_new - q_goal;
 
-    } while (diferencia.norm2() > region_q );
+    } while (diferencia.norm2() > region_q);
     auto finish = std::chrono::steady_clock::now();
     auto time =
         std::chrono::duration_cast<std::chrono::milliseconds>(finish - start)
@@ -309,25 +227,26 @@ class URRobot {
       // cout << "x, y, z" << getPose().P() << endl;
     }
     res.success = true;
-        auto finish2 = std::chrono::steady_clock::now();
+    auto finish2 = std::chrono::steady_clock::now();
     auto time2 =
         std::chrono::duration_cast<std::chrono::milliseconds>(finish2 - finish)
             .count();
     ulong planner_time_2 = time2;
-    cout << "time 1 " << planner_time_1 << endl; 
+    cout << "time 1 " << planner_time_1 << endl;
     cout << "time 2 " << planner_time_2 << endl;
     ros::Duration(0.5).sleep();
     sendHome();
     return true;
   }
   void initialize() {
-    //q_home = getQ();
+    // q_home = getQ();
     t_home = getPose();
-    //cout << "New Q_HOME: " << q_home << endl;
+    // cout << "New Q_HOME: " << q_home << endl;
     // q robot real inicial
     /*rw::math::Q q_ini(6, -0.384695, -1.08527, 1.37812, -0.309625, 1.56999,
                     0.0178859);*/
-    rw::math::Q q_ini(6, 0.103016, -1.55723, 1.60104, -0.0104208, 1.69122, 0.687377);
+    rw::math::Q q_ini(6, 0.103016, -1.55723, 1.60104, -0.0104208, 1.69122,
+                      0.687377);
 
     // rw::math::Q q_ini(6,);
     //  rw::math::Q q_ini(6, 1.435 ,-1.040, -4.380, -0.883, 1.551, 0 );
@@ -345,31 +264,9 @@ int main(int argc, char **argv) {
   robot.initialize();
   ros::ServiceServer _vision_service =
       n.advertiseService("/vision_coordinates", &URRobot::planner_rrt, &robot);
-  //_reset_subscriber = nh.subscribe("/reset_home", 10,
-  //&URRobot::setHomeAndReset,this);
   ros::ServiceServer _reset_service =
       n.advertiseService("/reset_home", &URRobot::setHomeAndReset, &robot);
   ros::spin();
-  // Otherwise we can forget to set the device or
-  // something...
-  /* #########  PLANNER CONSTRAINT ######################################### */
 
-  /*std::cout << "Q Init -> " << robot.getQ() << std::endl;  // para mostrar
-  nada mas
-                                                           // std::cout <<
-  robot.getPose() << std::endl;
-
-  auto robot_transform = robot.getPose();  // Devuelve transform3D
-  std::cout << "Metete unas coordenadas loco: " << std::endl;
-  float x, y, z;
-  std::cin >> x >> y >> z;
-  cout << "llamamos planner " << endl;
-  auto rpy = RPY<double>(robot_transform.R());
-  // TODO change roll/yaw -> NEEDED
-  auto rpy_changed = RPY<double>(rpy[2], rpy[1], rpy[0]);
-
-  robot.planner_rrt(x, y, z, rpy);*/
-
-  // Usando UR1.TCP -> rpy
   return 0;
 }
