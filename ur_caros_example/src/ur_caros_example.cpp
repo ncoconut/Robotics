@@ -238,7 +238,7 @@ class URRobot {
         wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
 
     Q dq = q_rand - q_near;
-    double extend = 0.4;
+    double extend = dq.norm2();
     q_new = q_rand;
     return checkCollisions(device, state, detector, q_new, q_near, extend);
     // cuando no choca -> true
@@ -296,7 +296,11 @@ class URRobot {
       diferencia = q_new - q_goal;
 
     } while (diferencia.norm2() > region_q );
-
+    auto finish = std::chrono::steady_clock::now();
+    auto time =
+        std::chrono::duration_cast<std::chrono::milliseconds>(finish - start)
+            .count();
+    ulong planner_time_1 = time;
 
     for (QPath::iterator it = path.begin(); it < path.end(); it++) {
       // cout << *it << endl;
@@ -305,6 +309,13 @@ class URRobot {
       // cout << "x, y, z" << getPose().P() << endl;
     }
     res.success = true;
+        auto finish2 = std::chrono::steady_clock::now();
+    auto time2 =
+        std::chrono::duration_cast<std::chrono::milliseconds>(finish2 - finish)
+            .count();
+    ulong planner_time_2 = time2;
+    cout << "time 1 " << planner_time_1 << endl; 
+    cout << "time 2 " << planner_time_2 << endl;
     ros::Duration(0.5).sleep();
     sendHome();
     return true;
